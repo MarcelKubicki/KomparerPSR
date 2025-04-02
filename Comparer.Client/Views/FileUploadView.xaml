@@ -1,0 +1,95 @@
+﻿<UserControl x:Class="Comparer.Client.Views.FileUploadView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Comparer.Client.Views"
+             xmlns:vm="clr-namespace:Comparer.Client.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="900">
+
+    <UserControl.DataContext>
+        <vm:FileUploadViewModel />
+    </UserControl.DataContext>
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Przesyłanie plików na serwer" 
+                   FontSize="24" FontWeight="SemiBold" Margin="0,0,0,20"/>
+
+        <Border Grid.Row="1" BorderBrush="#CCCCCC" BorderThickness="1" 
+                Background="#F5F8FA" Margin="0,0,0,20" CornerRadius="4">
+            <Grid>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
+                    <TextBlock Text="Przeciągnij pliki tutaj lub" HorizontalAlignment="Center" 
+                              TextAlignment="Center" Margin="0,0,0,10"/>
+                    <Button Content="Wybierz pliki" Command="{Binding SelectFilesCommand}"
+                            Width="150" Height="30" Background="#4299E1" Foreground="White"
+                            BorderThickness="0" />
+                </StackPanel>
+
+            </Grid>
+        </Border>
+
+        <StackPanel Grid.Row="2" Margin="0,0,0,20">
+            <TextBlock Text="Wybrane pliki" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+            <ListView ItemsSource="{Binding SelectedFiles}" BorderThickness="0" Background="Transparent">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="5,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="{Binding Name}" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{Binding SizeDisplay}" 
+                                       Margin="15,0" VerticalAlignment="Center"/>
+                            <Button Grid.Column="2" Content="Usuń" 
+                                    Command="{Binding DataContext.RemoveFileCommand, 
+                                              RelativeSource={RelativeSource AncestorType=ListView}}" 
+                                    CommandParameter="{Binding}"
+                                    Background="#F56565" Foreground="White" 
+                                    BorderThickness="0" Width="80" Height="25"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Margin="0,0,0,20">
+            <TextBlock Text="Opcje przetwarzania" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+            <CheckBox Content="Analiza podobieństwa" IsChecked="{Binding IsAnalysisModeSelected}"/>
+
+            <TextBlock Text="Wybór węzłów roboczych" FontWeight="SemiBold" FontSize="16" Margin="0,20,0,10"/>
+            <ItemsControl ItemsSource="{Binding AvailableWorkers}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <CheckBox IsChecked="{Binding IsSelected}" VerticalAlignment="Center"/>
+                            <Ellipse  Visibility="{Binding IsAvailable}"
+                                      Width="12" Height="12" Fill="Green" Margin="5,0"/>
+                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                            <TextBlock Text=" (dostępny)" Visibility="{Binding IsAvailable}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+
+        <Button Grid.Row="4" Content="Rozpocznij przetwarzanie" 
+                Command="{Binding StartProcessingCommand}"
+                Width="200" Height="35" HorizontalAlignment="Left"
+                Background="#4299E1" Foreground="White" 
+                BorderThickness="0" />
+    </Grid>
+</UserControl>
