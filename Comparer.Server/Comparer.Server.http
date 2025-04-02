@@ -1,0 +1,6 @@
+@Comparer.Server_HostAddress = http://localhost:5086
+
+GET {{Comparer.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
